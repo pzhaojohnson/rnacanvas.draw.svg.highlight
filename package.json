@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw.svg.highlight",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Highlight things in SVG documents",
   "repository": {
     "type": "git",

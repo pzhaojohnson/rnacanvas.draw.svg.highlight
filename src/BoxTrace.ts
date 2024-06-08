@@ -20,7 +20,7 @@ interface Box {
  * Represents an SVG element that can be added to an SVG document (or an overlaid SVG document)
  * to highlight a specified box (such as the bounding box of another SVG element).
  *
- * Currently has the appearance of a blue and aqua dashed line drawn around a specified box.
+ * Currently has the appearance of a light and dark dashed line drawn around a specified box.
  *
  * The underlying DOM nodes that make up a box trace are not meant to be directly edited by outside code
  * but rather only edited through the interface provided by this class.
@@ -33,36 +33,38 @@ export class BoxTrace {
    */
   private domNode: SVGGElement;
 
-  private blueDashing: SVGPathElement;
-  private aquaDashing: SVGPathElement;
+  private lightDashing: SVGPathElement;
+  private darkDashing: SVGPathElement;
 
   constructor() {
     this.domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
-    this.blueDashing = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    this.aquaDashing = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.lightDashing = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.darkDashing = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-    // aqua dashing on top of blue dashing
-    this.domNode.append(this.blueDashing, this.aquaDashing);
+    this.domNode.append(this.lightDashing, this.darkDashing);
 
     this.domNode.style.pointerEvents = 'none';
 
-    this.blueDashing.setAttribute('stroke', 'blue');
-    this.aquaDashing.setAttribute('stroke', 'aqua');
+    this.lightDashing.setAttribute('stroke', 'powderblue');
+    this.darkDashing.setAttribute('stroke', 'blue');
 
-    // note that it is also possible to simply have a solid blue trace underneath the aqua dashing
-    // (however this could inadvertently result in the aqua dashing appearing as a solid line for boxes with zero width or zero height)
-    this.blueDashing.setAttribute('stroke-dasharray', '0.75 0.75');
-    this.aquaDashing.setAttribute('stroke-dasharray', '0.75 0.75');
+    // note that it is also possible to simply have a solid trace underneath a dashed trace
+    // (however this could inadvertently result in the dashed trace appearing as a solid line for boxes with zero width or zero height)
+    this.lightDashing.setAttribute('stroke-dasharray', '0 1');
+    this.darkDashing.setAttribute('stroke-dasharray', '0 1');
+
+    this.lightDashing.setAttribute('stroke-linecap', 'round');
+    this.darkDashing.setAttribute('stroke-linecap', 'round');
 
     // so that the dashes don't overlap
-    this.aquaDashing.setAttribute('stroke-dashoffset', '0.75');
+    this.darkDashing.setAttribute('stroke-dashoffset', '0.5');
 
-    this.blueDashing.setAttribute('stroke-width', '0.75');
-    this.aquaDashing.setAttribute('stroke-width', '0.75');
+    this.lightDashing.setAttribute('stroke-width', '0.4');
+    this.darkDashing.setAttribute('stroke-width', '0.4');
 
-    this.blueDashing.setAttribute('fill', 'none');
-    this.aquaDashing.setAttribute('fill', 'none');
+    this.lightDashing.setAttribute('fill', 'none');
+    this.darkDashing.setAttribute('fill', 'none');
   }
 
   /**
@@ -87,16 +89,16 @@ export class BoxTrace {
   trace(box: Box): void {
     let d = `M ${box.x} ${box.y} h ${box.width} v ${box.height} h ${-box.width} z`;
 
-    this.blueDashing.setAttribute('d', d);
-    this.aquaDashing.setAttribute('d', d);
+    this.lightDashing.setAttribute('d', d);
+    this.darkDashing.setAttribute('d', d);
   }
 
   /**
    * Sets the thickness of the box trace (in pixels).
    */
   setThickness(thickness: number): void {
-    this.blueDashing.setAttribute('stroke-width', `${thickness}`);
-    this.aquaDashing.setAttribute('stroke-width', `${thickness}`);
+    this.lightDashing.setAttribute('stroke-width', `${thickness}`);
+    this.darkDashing.setAttribute('stroke-width', `${thickness}`);
   }
 
   setOpacity(opacity: number): void {
