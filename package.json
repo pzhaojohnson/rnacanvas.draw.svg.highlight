@@ -1,6 +1,6 @@
 {
   "name": "@rnacanvas/draw.svg.highlight",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Highlight things in SVG documents",
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@rnacanvas/boxes": "^2.3.1"
+    "@rnacanvas/boxes": "^2.3.1",
+    "@rnacanvas/draw.svg": "^2.5.1"
   }
 }

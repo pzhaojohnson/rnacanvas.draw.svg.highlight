@@ -1,5 +1,7 @@
 import { BoxHighlighting } from './BoxHighlighting';
 
+import { CoordinateSystem as SVGDocCoordinateSystem } from '@rnacanvas/draw.svg';
+
 /**
  * A set that can be listened to for when it changes.
  */
@@ -30,6 +32,8 @@ export class LiveSVGElementHighlightings {
    */
   private boxHighlightings: BoxHighlighting[] = [];
 
+  private parentSVGDocCoordinateSystem: SVGDocCoordinateSystem;
+
   /**
    * The target SVG elements must all have a bounding box.
    *
@@ -39,6 +43,8 @@ export class LiveSVGElementHighlightings {
    * @param parentSVGDoc The SVG document that the target SVG elements are contained in.
    */
   constructor(private targetSVGElements: LiveSet<SVGGraphicsElement>, parentSVGDoc: SVGSVGElement) {
+    this.parentSVGDocCoordinateSystem = new SVGDocCoordinateSystem(parentSVGDoc);
+
     targetSVGElements.addEventListener('change', () => this.refresh());
 
     let parentSVGDocObserver = new MutationObserver(() => this.refresh());
@@ -75,12 +81,17 @@ export class LiveSVGElementHighlightings {
       this.boxHighlightings.push(boxHighlighting);
     });
 
-    // highlight the target SVG elements
+    // adjust line thickness according to the scaling of the parent SVG document
+    let scaling = this.parentSVGDocCoordinateSystem.horizontalScaling;
+    let lineThickness = 0.5 / scaling;
+
+    // highlight the target SVG elements and update line thicknesses and opacities
     // (also enclose array indexing in a try...catch statement just to be safe)
     targetSVGElements.forEach((ele, i) => {
       try {
         let boxHighlighting = this.boxHighlightings[i];
         boxHighlighting.highlight(ele.getBBox());
+        boxHighlighting.lineThickness = lineThickness;
         boxHighlighting.setOpacity(1);
       } catch (error: unknown) {
         console.error(error);
