@@ -1,4 +1,4 @@
-import { BoxTrace } from './BoxTrace';
+import { BoxHighlighting } from './BoxHighlighting';
 
 /**
  * A set that can be listened to for when it changes.
@@ -26,9 +26,9 @@ export class LiveSVGElementHighlightings {
   private domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
   /**
-   * Use box traces to highlight the bounding boxes of the target SVG elements.
+   * Use box highlightings to highlight the bounding boxes of the target SVG elements.
    */
-  private boxTraces: BoxTrace[] = [];
+  private boxHighlightings: BoxHighlighting[] = [];
 
   /**
    * The target SVG elements must all have a bounding box.
@@ -68,26 +68,28 @@ export class LiveSVGElementHighlightings {
   private refresh(): void {
     let targetSVGElements = [...this.targetSVGElements];
 
-    // create any additional box traces that are needed (one for each target SVG element)
-    targetSVGElements.slice(this.boxTraces.length).forEach(() => {
-      let boxTrace = new BoxTrace();
-      boxTrace.appendTo(this.domNode);
-      this.boxTraces.push(boxTrace);
+    // create any additional box highlightings that are needed (one for each target SVG element)
+    targetSVGElements.slice(this.boxHighlightings.length).forEach(() => {
+      let boxHighlighting = new BoxHighlighting();
+      boxHighlighting.appendTo(this.domNode);
+      this.boxHighlightings.push(boxHighlighting);
     });
 
-    // trace the target SVG elements
+    // highlight the target SVG elements
     // (also enclose array indexing in a try...catch statement just to be safe)
     targetSVGElements.forEach((ele, i) => {
       try {
-        let boxTrace = this.boxTraces[i];
-        boxTrace.trace(ele.getBBox());
-        boxTrace.setOpacity(1);
+        let boxHighlighting = this.boxHighlightings[i];
+        boxHighlighting.highlight(ele.getBBox());
+        boxHighlighting.setOpacity(1);
       } catch (error: unknown) {
         console.error(error);
       }
     });
 
     // make any extra box traces invisible
-    this.boxTraces.slice(targetSVGElements.length).forEach(trace => trace.setOpacity(0));
+    this.boxHighlightings
+      .slice(targetSVGElements.length)
+      .forEach(boxHighlighting => boxHighlighting.setOpacity(0));
   }
 }
