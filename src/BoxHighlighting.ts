@@ -48,7 +48,7 @@ export class BoxHighlighting {
   private bottomRightCornerBox: SVGPathElement;
   private bottomLeftCornerBox: SVGPathElement;
 
-  #lineThickness = 0.2;
+  #lineThickness = 0.5;
 
   /**
    * The currently highlighted box.
@@ -145,6 +145,8 @@ export class BoxHighlighting {
   }
 
   set lineThickness(lineThickness) {
+    this.#lineThickness = lineThickness;
+
     [this.boxTrace, ...this.cornerBoxes].forEach(ele => {
       ele.setAttribute('stroke-width', `${lineThickness}`);
     });
