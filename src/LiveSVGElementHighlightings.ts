@@ -83,7 +83,7 @@ export class LiveSVGElementHighlightings {
 
     // adjust line thickness according to the scaling of the parent SVG document
     let scaling = this.parentSVGDocCoordinateSystem.horizontalScaling;
-    let lineThickness = 0.5 / scaling;
+    let lineThickness = 0.75 / scaling;
 
     // highlight the target SVG elements and update line thicknesses and opacities
     // (also enclose array indexing in a try...catch statement just to be safe)
