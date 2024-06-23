@@ -111,10 +111,10 @@ export class BoxHighlighting {
    */
   private cornerBoxD({ centerPoint }: { centerPoint: Point }): string {
     return (
-      `M ${centerPoint.x - (this.#lineThickness**0.5)} ${centerPoint.y - (this.#lineThickness**0.5)}`
-      + ` h ${2 * (this.#lineThickness**0.5)}`
-      + ` v ${2 * (this.#lineThickness**0.5)}`
-      + ` h ${-2 * (this.#lineThickness**0.5)}`
+      `M ${centerPoint.x - (2.5 * this.#lineThickness)} ${centerPoint.y - (2.5 * this.#lineThickness)}`
+      + ` h ${5 * this.#lineThickness}`
+      + ` v ${5 * this.#lineThickness}`
+      + ` h ${-5 * this.#lineThickness}`
       + ' z'
     );
   }
