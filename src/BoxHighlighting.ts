@@ -67,7 +67,7 @@ export class BoxHighlighting {
 
     this.domNode.append(this.boxTrace, ...this.cornerBoxes);
 
-    this.domNode.style.pointerEvents = 'none';
+    this.domNode.style.pointerEvents = 'auto';
 
     this.boxTrace.setAttribute('stroke', 'blue');
     this.boxTrace.setAttribute('stroke-width', `${this.#lineThickness}`);
