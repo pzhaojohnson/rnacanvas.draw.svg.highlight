@@ -157,4 +157,16 @@ export class BoxHighlighting {
   setOpacity(opacity: number): void {
     this.domNode.setAttribute('opacity', `${opacity}`);
   }
+
+  hide(): void {
+    this.setOpacity(0);
+
+    this.domNode.style.pointerEvents = 'none';
+  }
+
+  unhide(): void {
+    this.setOpacity(1);
+
+    this.domNode.style.pointerEvents = 'auto';
+  }
 }

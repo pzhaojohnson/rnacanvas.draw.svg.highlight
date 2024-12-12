@@ -92,7 +92,7 @@ export class LiveSVGElementHighlightings {
         let boxHighlighting = this.boxHighlightings[i];
         boxHighlighting.highlight(ele.getBBox());
         boxHighlighting.lineThickness = lineThickness;
-        boxHighlighting.setOpacity(1);
+        boxHighlighting.unhide();
       } catch (error: unknown) {
         console.error(error);
       }
@@ -101,6 +101,6 @@ export class LiveSVGElementHighlightings {
     // make any extra box traces invisible
     this.boxHighlightings
       .slice(targetSVGElements.length)
-      .forEach(boxHighlighting => boxHighlighting.setOpacity(0));
+      .forEach(boxHighlighting => boxHighlighting.hide());
   }
 }
