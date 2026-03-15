@@ -135,6 +135,12 @@ export class BoxHighlighting {
     this.highlightedBox = box;
   }
 
+  setPrimaryColor(color: string): void {
+    [this.boxTrace, ...this.cornerBoxes].forEach(ele => {
+      ele.setAttribute('stroke', color);
+    });
+  }
+
   /**
    * Line thickness is specified in pixels.
    *
