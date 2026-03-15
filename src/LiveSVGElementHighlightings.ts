@@ -25,7 +25,7 @@ export class LiveSVGElementHighlightings {
   /**
    * The actual DOM node that contains all of the underlying DOM nodes that make up the SVG element highlightings.
    */
-  private domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  readonly domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
   /**
    * Use box highlightings to highlight the bounding boxes of the target SVG elements.
