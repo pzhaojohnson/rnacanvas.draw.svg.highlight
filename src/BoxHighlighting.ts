@@ -48,6 +48,8 @@ export class BoxHighlighting {
   private bottomRightCornerBox: SVGPathElement;
   private bottomLeftCornerBox: SVGPathElement;
 
+  scalingFactor = 1;
+
   #lineThickness = 0.5;
 
   /**
@@ -124,6 +126,8 @@ export class BoxHighlighting {
    */
   highlight(boxLike: BoxLike): void {
     let box = Box.matching(boxLike);
+
+    box = box.padded({ factor: this.scalingFactor - 1 });
 
     this.boxTrace.setAttribute('d', `M ${box.x} ${box.y} h ${box.width} v ${box.height} h ${-box.width} z`);
 
