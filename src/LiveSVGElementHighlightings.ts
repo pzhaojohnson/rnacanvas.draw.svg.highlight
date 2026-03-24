@@ -29,6 +29,8 @@ export class LiveSVGElementHighlightings {
    */
   readonly domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
+  #primaryColor = 'blue';
+
   #padding = 0;
 
   /**
@@ -75,6 +77,12 @@ export class LiveSVGElementHighlightings {
     this.domNode.remove();
   }
 
+  setPrimaryColor(color: string): void {
+    this.#primaryColor = color;
+
+    this.boxHighlightings.forEach(highlighting => highlighting.setPrimaryColor(color));
+  }
+
   /**
    * The padding between highlightings and the bounding boxes of highlighted elements.
    *
@@ -96,6 +104,7 @@ export class LiveSVGElementHighlightings {
     // create any additional box highlightings that are needed (one for each target SVG element)
     targetSVGElements.slice(this.boxHighlightings.length).forEach(() => {
       let boxHighlighting = new BoxHighlighting();
+      boxHighlighting.setPrimaryColor(this.#primaryColor);
       boxHighlighting.appendTo(this.domNode);
       this.boxHighlightings.push(boxHighlighting);
     });
