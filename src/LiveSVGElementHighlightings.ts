@@ -1,18 +1,10 @@
+import type { LiveCollection } from './LiveCollection';
+
 import { BoxHighlighting } from './BoxHighlighting';
 
 import { CoordinateSystem as SVGDocCoordinateSystem } from '@rnacanvas/draw.svg';
 
 import { Box } from '@rnacanvas/boxes';
-
-/**
- * A set that can be listened to for when it changes.
- */
-interface LiveSet<T> extends Iterable<T> {
-  /**
-   * Should call the provided listener whenever the composition of items in the set changes.
-   */
-  addEventListener(name: 'change', listener: () => void): void;
-}
 
 /**
  * A live collection of SVG element highlightings.
@@ -48,7 +40,7 @@ export class LiveSVGElementHighlightings {
    * @param targetSVGElements The SVG elements to highlight.
    * @param parentSVGDoc The SVG document that the target SVG elements are contained in.
    */
-  constructor(private targetSVGElements: LiveSet<SVGGraphicsElement>, parentSVGDoc: SVGSVGElement) {
+  constructor(private targetSVGElements: LiveCollection<SVGGraphicsElement>, parentSVGDoc: SVGSVGElement) {
     this.parentSVGDocCoordinateSystem = new SVGDocCoordinateSystem(parentSVGDoc);
 
     targetSVGElements.addEventListener('change', () => this.refresh());
