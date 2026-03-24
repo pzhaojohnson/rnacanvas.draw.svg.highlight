@@ -2,6 +2,8 @@ import { BoxHighlighting } from './BoxHighlighting';
 
 import { CoordinateSystem as SVGDocCoordinateSystem } from '@rnacanvas/draw.svg';
 
+import { Box } from '@rnacanvas/boxes';
+
 /**
  * A set that can be listened to for when it changes.
  */
@@ -26,6 +28,8 @@ export class LiveSVGElementHighlightings {
    * The actual DOM node that contains all of the underlying DOM nodes that make up the SVG element highlightings.
    */
   readonly domNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+  #padding = 0;
 
   /**
    * Use box highlightings to highlight the bounding boxes of the target SVG elements.
@@ -71,6 +75,21 @@ export class LiveSVGElementHighlightings {
     this.domNode.remove();
   }
 
+  /**
+   * The padding between highlightings and the bounding boxes of highlighted elements.
+   *
+   * Is expressed in user coordinates (i.e., accounting for the scaling of the parent SVG document).
+   */
+  get padding() {
+    return this.#padding;
+  }
+
+  set padding(padding) {
+    this.#padding = padding;
+
+    this.refresh();
+  }
+
   private refresh(): void {
     let targetSVGElements = [...this.targetSVGElements];
 
@@ -90,8 +109,16 @@ export class LiveSVGElementHighlightings {
     targetSVGElements.forEach((ele, i) => {
       try {
         let boxHighlighting = this.boxHighlightings[i];
-        boxHighlighting.highlight(ele.getBBox());
+
+        let bbox = Box.matching(ele.getBBox());
+
+        // account for the scaling of the parent SVG document
+        let paddedBBox = bbox.padded(this.#padding / scaling);
+
+        boxHighlighting.highlight(paddedBBox);
+
         boxHighlighting.lineThickness = lineThickness;
+
         boxHighlighting.unhide();
       } catch (error: unknown) {
         console.error(error);
